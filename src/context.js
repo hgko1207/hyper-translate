@@ -1,0 +1,31 @@
+import React, { createContext, useState, useContext } from "react";
+
+const LangContext = createContext();
+
+export const useLangContext = () => useContext(LangContext);
+
+const Lang = ({ defaultLang, children, transloations }) => {
+  const [lang, setLang] = useState(defaultLang);
+  const hyperTranslate = text => {
+    if (lang === defaultLang) {
+      return text;
+    } else {
+      return transloations[lang][text];
+    }
+  };
+  return (
+    <LangContext.Provider value={{ setLang, t: hyperTranslate }}>{children}</LangContext.Provider>
+  );
+};
+
+export const useSetLang = () => {
+  const { setLang } = useContext(LangContext);
+  return setLang;
+};
+
+export const useT = () => {
+  const { t } = useContext(LangContext);
+  return t;
+};
+
+export default Lang;
